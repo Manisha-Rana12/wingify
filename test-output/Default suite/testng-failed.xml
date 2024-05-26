@@ -7,7 +7,12 @@
         <methods>
           <include name="isAmountSorted"/>
           <include name="tearDown"/>
+          <include name="validTest1"/>
+          <include name="negativeTest3"/>
+          <include name="negativeTest2"/>
+          <include name="assertion"/>
           <include name="setup"/>
+          <include name="negativetest1"/>
         </methods>
       </class> <!-- myProject.LoginPage -->
     </classes>

@@ -10,15 +10,24 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import com.relevantcodes.extentreports.ExtentReports;
+//import com.aventstack.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class LoginPage {
 	
+	ExtentReports eR;
+	WebDriver driver;
+	ExtentTest test;
 	public boolean isStringArraySorted(String[] str) {
 		  for (int i = 1; i < str.length; i++) {
 		    if (str[i].compareTo(str[i - 1]) < 0) {
@@ -28,7 +37,16 @@ public class LoginPage {
 		  return true;
 		}
 
-	 WebDriver driver;
+	 
+	 @BeforeClass
+	 public void reportGenarate() {
+		 
+		 eR = new ExtentReports(System.getProperty("user.dir")+"/LoginPage.html");
+		 
+		 test = eR.startTest("Demo App");
+	     
+		 
+	 }
 	
 	@BeforeMethod
 	public void setup() throws InterruptedException, IOException{
@@ -49,6 +67,8 @@ public class LoginPage {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		
 		driver.get(pro.getProperty("DemoAppUrl"));
+		
+		test.log(LogStatus.PASS, "Browser is open successfully");
 			
 }
 	@Test(priority = 1)
@@ -66,6 +86,8 @@ public class LoginPage {
 		driver.findElement(By.id("username")).sendKeys("Manisha");
 		
 		Thread.sleep(5000);
+		
+		test.log(LogStatus.PASS, "Assertion got passed");
 		
 	}
 	
@@ -94,6 +116,8 @@ public class LoginPage {
 	   //--------clicking on remember me checkbox--------
 	    
 	    //driver.findElement(By.xpath("//input[@class='form-check-input']")).click();
+	    
+	    test.log(LogStatus.PASS, "Login into the application successfully");
 
 }
      @Test(priority = 3)
@@ -117,6 +141,8 @@ public class LoginPage {
  	
  	    driver.findElement(By.id("log-in")).click();
  	    Thread.sleep(4000);
+ 	    
+ 	    test.log(LogStatus.PASS, "Proper error messages are there");
 	}
      @Test(priority = 4)
      public void negativeTest2() throws InterruptedException {
@@ -139,6 +165,8 @@ public class LoginPage {
  	
  	    driver.findElement(By.id("log-in")).click();
  	    Thread.sleep(4000);
+ 	    
+ 	    test.log(LogStatus.PASS, "Proper error messages are there");
      }
 	 @Test(priority = 5)
      public void negativeTest3() throws InterruptedException {
@@ -161,6 +189,8 @@ public class LoginPage {
  	
  	    driver.findElement(By.id("log-in")).click();
  	    Thread.sleep(4000);
+ 	    
+ 	    test.log(LogStatus.PASS, "Proper error messages are there");
      }
 	@Test(priority = 6)
 	public void isAmountSorted() throws InterruptedException {
@@ -212,13 +242,20 @@ public class LoginPage {
 		}else {
 			System.out.println("Table is not sorted");
 		}
-			
+		test.log(LogStatus.PASS, "Comparison is done");
 	}
 	
 	@AfterMethod
 	    public void tearDown() {
 	        
 	            driver.quit();
-	      
+	            
+	            test.log(LogStatus.PASS, "Browser is closed successfully");
 	    }
+	@AfterClass
+	public void reportFlush() {
+		eR.endTest(test);
+		
+		eR.flush();
+	}
 }
